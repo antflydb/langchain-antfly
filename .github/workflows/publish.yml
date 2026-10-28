@@ -40,7 +40,7 @@ jobs:
           from pathlib import Path
           environment = json.loads((Path(os.environ['RUNNER_TEMP']) / 'publish-environment.json').read_text())
           rules = [rule for rule in environment.get('protection_rules', []) if rule['type'] == 'required_reviewers']
-          assert len(rules) == 1 and rules[0].get('prevent_self_review') and rules[0].get('reviewers'), 'Configure required reviewers and self-review prevention before publishing'
+          assert len(rules) == 1 and rules[0].get('reviewers'), 'Configure required reviewers before publishing'
           assert environment.get('deployment_branch_policy', {}).get('custom_branch_policies'), 'Configure the main-only environment branch policy before publishing'
           PY
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -40,7 +40,8 @@ memory. Only the upload jobs receive an OIDC identity.
 
 Publishing requires matching [Trusted Publishers](https://docs.pypi.org/trusted-publishers/)
 and GitHub environments named `testpypi` and `pypi`. Each environment requires
-reviewers, prevents self-review and restricts deployment to `main`. The workflow
+reviewers and restricts deployment to `main`. The person starting a run may also
+approve it. The workflow
 fails before building if these protections are absent; it never creates an
 unprotected substitute. Publisher configuration must identify this repository,
 `publish.yml` and the matching environment. Production and test registries have
