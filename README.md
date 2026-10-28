@@ -9,9 +9,9 @@ embeddings, reranking, documents, media, graph context, and LangGraph memory.
 | `langchain-antfly` | `langchain_antfly` | Retrieval, embeddings, reranking, document/media stores and graph tools |
 | `langgraph-store-antfly` | `langgraph_store_antfly` | Persistent, namespaced long-term agent memory |
 
-**Preview release:** `0.1.0rc1`. Until the first PyPI upload is available, use the
-source checkout below or the wheels from the
-[release-candidate workflow](https://github.com/antflydb/langchain-antfly/actions/workflows/release-candidate.yml).
+**Release candidate:** `0.1.0rc1`, available on PyPI for
+[LangChain](https://pypi.org/project/langchain-antfly/0.1.0rc1/) and
+[LangGraph memory](https://pypi.org/project/langgraph-store-antfly/0.1.0rc1/).
 
 ## Requirements
 
@@ -80,7 +80,7 @@ documents when rerun; `--cleanup` removes only the example's dedicated table.
 
 ### Install the distributions
 
-After the release candidate is available on PyPI:
+Install the release candidates from PyPI:
 
 ```bash
 pip install langchain-antfly==0.1.0rc1
