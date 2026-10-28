@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+[project]
+name = "langgraph-store-antfly"
+version = "0.1.0rc1"
+readme = "README.md"
+description = "Persistent namespaced agent memory backed by Antfly"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["antfly", "langgraph", "agents", "memory", "persistence"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = ["langchain-antfly==0.1.0rc1", "langgraph-checkpoint>=4.3,<5", "langchain-core>=1.4.4,<2"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/langgraph_store_antfly"]
+
+[project.urls]
+Homepage = "https://github.com/antflydb/langchain-antfly"
+Repository = "https://github.com/antflydb/langchain-antfly"
+Documentation = "https://github.com/antflydb/langchain-antfly#readme"
+Issues = "https://github.com/antflydb/langchain-antfly/issues"

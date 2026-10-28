@@ -1,0 +1,836 @@
+{
+  "evaluation_revision": "orchard-eval-v1-20-frozen-2026-10-26",
+  "corpus_sha256": "7afb47d461ee81d8a5e31f39ac72647cbda5b8f7430c5f477eba4fa04371ae15",
+  "labels_sha256": "df97d791a8145aa41028e68754c5853f36a274ec36c1d969d7a0b2b43be1c3c7",
+  "models": {
+    "native": "antflydb/clipclap:gguf:Q4_K",
+    "proxy": "BAAI/bge-small-en-v1.5:onnx"
+  },
+  "metrics": {
+    "proxy": {
+      "all": {
+        "answerable_questions": 16,
+        "mean_required_evidence_recall": {
+          "1": 0.8125,
+          "2": 0.96875,
+          "5": 1.0
+        }
+      },
+      "cross_modal": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 0.5,
+          "2": 0.875,
+          "5": 1.0
+        }
+      },
+      "negative": {
+        "answerable_questions": 0,
+        "mean_required_evidence_recall": {
+          "1": null,
+          "2": null,
+          "5": null
+        }
+      },
+      "table": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 1.0,
+          "2": 1.0,
+          "5": 1.0
+        }
+      },
+      "text": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 0.75,
+          "2": 1.0,
+          "5": 1.0
+        }
+      },
+      "visual": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 1.0,
+          "2": 1.0,
+          "5": 1.0
+        }
+      }
+    },
+    "native": {
+      "all": {
+        "answerable_questions": 16,
+        "mean_required_evidence_recall": {
+          "1": 0.625,
+          "2": 1.0,
+          "5": 1.0
+        }
+      },
+      "cross_modal": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 0.5,
+          "2": 1.0,
+          "5": 1.0
+        }
+      },
+      "negative": {
+        "answerable_questions": 0,
+        "mean_required_evidence_recall": {
+          "1": null,
+          "2": null,
+          "5": null
+        }
+      },
+      "table": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 1.0,
+          "2": 1.0,
+          "5": 1.0
+        }
+      },
+      "text": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 1.0,
+          "2": 1.0,
+          "5": 1.0
+        }
+      },
+      "visual": {
+        "answerable_questions": 4,
+        "mean_required_evidence_recall": {
+          "1": 0.0,
+          "2": 1.0,
+          "5": 1.0
+        }
+      }
+    }
+  },
+  "questions": [
+    {
+      "id": "text-owner",
+      "category": "text",
+      "question": "Who owns operations?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08416312513872981,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.09027887461706996,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "text-window",
+      "category": "text",
+      "question": "What is the escalation window?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-2",
+            "page-1",
+            "figure-1"
+          ],
+          "latency_seconds": 0.052810708060860634,
+          "recall": {
+            "1": 0.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-2",
+            "figure-1"
+          ],
+          "latency_seconds": 0.09019579226151109,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "text-target",
+      "category": "text",
+      "question": "What is the Q3 shipment target?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.0507769170217216,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08482937514781952,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "text-products",
+      "category": "text",
+      "question": "Which two fruits does Orchard ship?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.05532495863735676,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.09338474972173572,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "table-pears",
+      "category": "table",
+      "question": "How many pears shipped in Q3?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.0547665418125689,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08978054113686085,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "table-apples",
+      "category": "table",
+      "question": "How many apples shipped in Q2?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.04728324990719557,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.09339070925489068,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "table-q1",
+      "category": "table",
+      "question": "How many pears shipped in Q1?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.05126470886170864,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08626995887607336,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "table-change",
+      "category": "table",
+      "question": "By how many crates did apple shipments increase from Q1 to Q3?",
+      "required": [
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.06418341724202037,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.09469158388674259,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "visual-total",
+      "category": "visual",
+      "question": "How many total crates shipped in Q3 according to the chart?",
+      "required": [
+        "figure-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-1",
+            "page-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.06342158420011401,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.0917982910759747,
+          "recall": {
+            "1": 0.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "visual-only",
+      "category": "visual",
+      "question": "What color and shape is the audit marker in the quarterly shipment chart?",
+      "required": [
+        "figure-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-1",
+            "page-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.0649344576522708,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08861216716468334,
+          "recall": {
+            "1": 0.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "visual-threshold",
+      "category": "visual",
+      "question": "What temperature threshold is shown in the escalation system diagram?",
+      "required": [
+        "figure-2"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-2",
+            "page-1",
+            "figure-1"
+          ],
+          "latency_seconds": 0.05620020814239979,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-2",
+            "figure-1"
+          ],
+          "latency_seconds": 0.08626708295196295,
+          "recall": {
+            "1": 0.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "visual-route",
+      "category": "visual",
+      "question": "Which component follows Controller in the escalation diagram?",
+      "required": [
+        "figure-2"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-2",
+            "figure-1",
+            "page-1"
+          ],
+          "latency_seconds": 0.06419245805591345,
+          "recall": {
+            "1": 1.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-2",
+            "figure-1"
+          ],
+          "latency_seconds": 0.09348700009286404,
+          "recall": {
+            "1": 0.0,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "cross-target",
+      "category": "cross_modal",
+      "question": "Compare the Q3 total in the shipment chart with the target stated in the report. Was the target met?",
+      "required": [
+        "figure-1",
+        "page-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-1",
+            "page-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.07203283300623298,
+          "recall": {
+            "1": 0.5,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.09485858399420977,
+          "recall": {
+            "1": 0.5,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "cross-window",
+      "category": "cross_modal",
+      "question": "Give both the escalation window in the prose and the temperature threshold in the diagram.",
+      "required": [
+        "page-1",
+        "figure-2"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-2",
+            "figure-1",
+            "page-1"
+          ],
+          "latency_seconds": 0.06383683299645782,
+          "recall": {
+            "1": 0.5,
+            "2": 0.5,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-2",
+            "figure-1"
+          ],
+          "latency_seconds": 0.09305387502536178,
+          "recall": {
+            "1": 0.5,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "cross-owner",
+      "category": "cross_modal",
+      "question": "Who owns operations, and which component comes after Controller in the diagram?",
+      "required": [
+        "page-1",
+        "figure-2"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "figure-2",
+            "page-1",
+            "figure-1"
+          ],
+          "latency_seconds": 0.0603942503221333,
+          "recall": {
+            "1": 0.5,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-2",
+            "figure-1"
+          ],
+          "latency_seconds": 0.08367870887741446,
+          "recall": {
+            "1": 0.5,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "cross-fruit",
+      "category": "cross_modal",
+      "question": "How many pears shipped in Q3 in the table, and how many total crates does the Q3 chart show?",
+      "required": [
+        "page-1",
+        "figure-1"
+      ],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.06400174973532557,
+          "recall": {
+            "1": 0.5,
+            "2": 1.0,
+            "5": 1.0
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08834204217419028,
+          "recall": {
+            "1": 0.5,
+            "2": 1.0,
+            "5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": "negative-phone",
+      "category": "negative",
+      "question": "What is the CEO's phone number?",
+      "required": [],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.05285387486219406,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08917816588655114,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        }
+      }
+    },
+    {
+      "id": "negative-revenue",
+      "category": "negative",
+      "question": "What was Q3 revenue in dollars?",
+      "required": [],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.05184783274307847,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.0941291251219809,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        }
+      }
+    },
+    {
+      "id": "negative-q4",
+      "category": "negative",
+      "question": "What is the confirmed actual shipment total for Q4?",
+      "required": [],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.05885316710919142,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-1",
+            "figure-2"
+          ],
+          "latency_seconds": 0.08669316722080112,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        }
+      }
+    },
+    {
+      "id": "negative-home",
+      "category": "negative",
+      "question": "What is Mira Chen's home address?",
+      "required": [],
+      "modes": {
+        "proxy": {
+          "retrieved": [
+            "page-1",
+            "figure-2",
+            "figure-1"
+          ],
+          "latency_seconds": 0.05173120787367225,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        },
+        "native": {
+          "retrieved": [
+            "page-1",
+            "figure-2",
+            "figure-1"
+          ],
+          "latency_seconds": 0.08668295899406075,
+          "recall": {
+            "1": null,
+            "2": null,
+            "5": null
+          }
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Three parents: recall@5 is saturated; inspect recall@1 and recall@2.",
+    "Negative questions have no evidence labels and are excluded from recall.",
+    "Retrieval only: answer grounding and abstention require the generation evaluation."
+  ],
+  "recorded_on": "2026-10-28",
+  "server_version": "0.3.0-rc.5"
+}

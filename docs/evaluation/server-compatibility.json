@@ -1,0 +1,69 @@
+{
+  "recorded_on": "2026-10-28",
+  "server": {
+    "version": "0.3.0-rc.5",
+    "release": "https://github.com/antflydb/antfly/releases/tag/v0.3.0-rc.5",
+    "source_commit": "ff2c66bd7ba63b3ef68d872e30d9ba31e0cf7301",
+    "archive_sha256": "e4caa7e3cef01933394b1864ccb225f2e9a78cae6dbbe3578ed091529eb64c81",
+    "binary_sha256": "0abf007f70a79fa3a47984dca35514de749fb3322bca7c601d88b03b364b72cf"
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.12.11"
+  },
+  "dependencies": {
+    "antfly-sdk": "0.2.1",
+    "langchain-core": "1.7.0",
+    "langgraph-checkpoint": "4.3.1"
+  },
+  "live_checks": {
+    "total": 377,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 377
+  },
+  "source_unchanged_during_run": true,
+  "embedding_model": "BAAI/bge-small-en-v1.5:onnx",
+  "reranking_model": "antflydb/mxbai-rerank-base-v1",
+  "cloud_generation_performed": false,
+  "persistence": {
+    "server_restarted": true,
+    "memory_values_and_creation_times_preserved": true,
+    "namespace_isolation_preserved": true,
+    "sync_and_async_queries_without_pdf_access": true,
+    "original_images_resolved": 2,
+    "frozen_evidence_questions_after_restart": 20,
+    "native_image_and_text_retrieval_after_restart": true
+  },
+  "multimodal_evidence": {
+    "questions": 20,
+    "passed": true
+  },
+  "native_image_retrieval": {
+    "passed": true,
+    "failures": [],
+    "image_queries": [
+      {
+        "query_image_sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+        "retrieved_ids": [
+          "7afb47d461ee81d8:figure-1"
+        ]
+      },
+      {
+        "query_image_sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+        "retrieved_ids": [
+          "7afb47d461ee81d8:figure-2"
+        ]
+      }
+    ],
+    "text_query_ids": [
+      "7afb47d461ee81d8:figure-1"
+    ]
+  },
+  "graph_supplement": {
+    "passed": true,
+    "questions": 3
+  }
+}

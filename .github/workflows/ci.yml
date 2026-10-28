@@ -1,0 +1,235 @@
+name: Python contracts and wheels
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_generation:
+        description: "Explicitly allow up to 22 vision calls (2 captions and 20 answers)"
+        type: boolean
+        required: false
+        default: false
+  schedule:
+    - cron: "23 8 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Resolve declared dependencies
+        run: uv sync --all-extras
+      - name: Check formatting and contracts
+        run: |
+          uv run ruff check .
+          uv run python scripts/validate.py --output .state/contracts -- uv run pytest -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: contracts-python-${{ matrix.python }}
+          path: .state/contracts/
+      - name: Build both distributions
+        run: |
+          uv build --package langchain-antfly
+          uv build --package langgraph-store-antfly
+      - name: Install and test distributions in a clean environment
+        run: |
+          uv export --frozen --all-extras --no-emit-workspace --no-hashes --output-file .state/wheel-requirements.txt
+          uv venv .state/wheel-venv
+          uv pip install --python .state/wheel-venv/bin/python -r .state/wheel-requirements.txt dist/*.whl
+          .state/wheel-venv/bin/python scripts/validate.py --output .state/wheel-contracts -- .state/wheel-venv/bin/python -m pytest -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wheel-contracts-python-${{ matrix.python }}
+          path: .state/wheel-contracts/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions-python-${{ matrix.python }}
+          path: dist/*
+
+  lower-bounds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+      - name: Resolve and test declared lower bounds
+        run: |
+          uv sync --all-extras --resolution lowest-direct
+          uv run pytest -q
+
+  live-example:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      ANTFLY_URL: ${{ vars.ANTFLY_TEST_URL }}
+      ANTFLY_EMBEDDING_MODEL: ${{ vars.ANTFLY_TEST_EMBEDDING_MODEL }}
+      ANTFLY_TOKEN: ${{ secrets.ANTFLY_TEST_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --all-extras
+      - name: Require the live example prerequisites
+        run: |
+          test -n "$ANTFLY_URL"
+          test -n "$ANTFLY_EMBEDDING_MODEL"
+      - name: Real embedding and persistent evidence example
+        run: |
+          uv run python -m examples.quickstart --table ci_quickstart_${{ github.run_id }}
+          uv run python -m examples.multimodal --prefix ci_${{ github.run_id }} preflight
+          uv run python -m examples.multimodal --prefix ci_${{ github.run_id }} ingest
+          uv run python -m examples.multimodal --prefix ci_${{ github.run_id }} --output evidence.json verify
+      - name: Remove only this run's owned tables
+        if: always() && env.ANTFLY_URL != ''
+        run: |
+          uv run python -m examples.quickstart --table ci_quickstart_${{ github.run_id }} --cleanup
+          uv run python -m examples.multimodal --prefix ci_${{ github.run_id }} cleanup
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-example-evidence
+          path: evidence.json
+
+  upstream-canary:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --all-extras --upgrade
+      - run: uv run pytest -q
+
+  live-contracts:
+    # A dedicated existing server with installed models is required. Ordinary PR
+    # jobs remain hermetic. Secrets are never exposed to fork pull requests.
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && vars.ANTFLY_TEST_URL != '')
+    runs-on: ubuntu-latest
+    env:
+      ANTFLY_TEST_URL: ${{ vars.ANTFLY_TEST_URL }}
+      ANTFLY_TEST_GRAPH_URL: ${{ vars.ANTFLY_TEST_GRAPH_URL || vars.ANTFLY_TEST_URL }}
+      ANTFLY_TEST_EMBEDDING_MODEL: ${{ vars.ANTFLY_TEST_EMBEDDING_MODEL }}
+      ANTFLY_TEST_RERANK_MODEL: ${{ vars.ANTFLY_TEST_RERANK_MODEL }}
+      ANTFLY_TEST_EXTERNAL_PROVIDER: openai
+      ANTFLY_TEST_TOKEN: ${{ secrets.ANTFLY_TEST_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --all-extras --group interoperability
+      - name: Require the complete live profile
+        run: |
+          test -n "$ANTFLY_TEST_URL"
+          test -n "$ANTFLY_TEST_EMBEDDING_MODEL"
+          test -n "$ANTFLY_TEST_RERANK_MODEL"
+      - name: Live models, upstream contracts, multishard graph and concurrent memory
+        run: uv run --group interoperability python scripts/validate.py --output .state/live -- uv run --group interoperability pytest -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-contracts-evidence
+          path: .state/live/
+
+  native-comparison:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && vars.ANTFLY_TEST_URL != '')
+    runs-on: ubuntu-latest
+    env:
+      ANTFLY_URL: ${{ vars.ANTFLY_TEST_URL }}
+      ANTFLY_EMBEDDING_MODEL: ${{ vars.ANTFLY_TEST_EMBEDDING_MODEL }}
+      ANTFLY_IMAGE_MODEL: ${{ vars.ANTFLY_TEST_IMAGE_MODEL }}
+      ANTFLY_TOKEN: ${{ secrets.ANTFLY_TEST_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --all-extras
+      - name: Require the native comparison prerequisites
+        run: |
+          test -n "$ANTFLY_URL"
+          test -n "$ANTFLY_EMBEDDING_MODEL"
+          test -n "$ANTFLY_IMAGE_MODEL"
+      - name: Ingest independent native and proxy modes
+        run: |
+          uv run python -m examples.multimodal --prefix ci_eval_${{ github.run_id }} preflight
+          uv run python -m examples.multimodal --prefix ci_eval_${{ github.run_id }} ingest
+          uv run python -m examples.evaluate_retrieval --prefix ci_eval_${{ github.run_id }} --native-table ci_native_${{ github.run_id }} --output comparison.json ingest
+      - name: Compare the same frozen questions without paid generation
+        run: uv run python -m examples.evaluate_retrieval --prefix ci_eval_${{ github.run_id }} --native-table ci_native_${{ github.run_id }} --output comparison.json evaluate
+      - name: Remove only this run's evaluation tables
+        if: always() && env.ANTFLY_URL != ''
+        run: |
+          uv run python -m examples.evaluate_retrieval --prefix ci_eval_${{ github.run_id }} --native-table ci_native_${{ github.run_id }} --output comparison.json cleanup
+          uv run python -m examples.multimodal --prefix ci_eval_${{ github.run_id }} cleanup
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-proxy-comparison
+          path: comparison.json
+
+  live-generation:
+    # Paid generation is manual opt-in only; PRs and schedules never enter it.
+    if: github.event_name == 'workflow_dispatch' && inputs.run_generation
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ANTFLY_URL: ${{ vars.ANTFLY_TEST_URL }}
+      ANTFLY_EMBEDDING_MODEL: ${{ vars.ANTFLY_TEST_EMBEDDING_MODEL }}
+      ANTFLY_TOKEN: ${{ secrets.ANTFLY_TEST_TOKEN }}
+      VISION_URL: ${{ vars.VISION_URL }}
+      VISION_MODEL: ${{ vars.VISION_MODEL }}
+      VISION_PROTOCOL: ${{ vars.VISION_PROTOCOL }}
+      VISION_API_KEY: ${{ secrets.VISION_API_KEY }}
+      GENERATION_PREFIX: ci_generation_${{ github.run_id }}_${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --all-extras
+      - name: Require explicit generation prerequisites
+        run: |
+          test -n "$ANTFLY_URL"
+          test -n "$ANTFLY_EMBEDDING_MODEL"
+          test -n "$VISION_URL"
+          test -n "$VISION_MODEL"
+          test -n "$VISION_PROTOCOL"
+          test -n "$VISION_API_KEY"
+      - name: Freeze the maximum generation call budget before any paid call
+        run: |
+          mkdir -p .state/generation
+          uv run python -c 'import json; from examples.multimodal.corpus import FIXTURES, extract; questions = json.loads((FIXTURES / "answers.json").read_text())["questions"]; parents, _, _ = extract(); captions = sum(bool(p.metadata.get("media_key")) for p in parents); assert captions == 2 and len(questions) == 20, "Review generation budget before changing fixture size"; print(json.dumps({"maximum_caption_calls": captions, "maximum_answer_calls": len(questions), "maximum_generation_calls": captions + len(questions)}))' > .state/generation/budget.json
+          uv run python -m examples.multimodal --help > .state/generation/help.txt
+          uv run python -m examples.multimodal ingest --help > .state/generation/ingest-help.txt
+          uv run python -m examples.multimodal verify --help > .state/generation/verify-help.txt
+      - name: Preflight and generate exactly the bounded fixture without retries
+        run: |
+          uv run python -m examples.multimodal --prefix "$GENERATION_PREFIX" --output .state/generation/preflight.json preflight
+          uv run python -m examples.multimodal --prefix "$GENERATION_PREFIX" --output .state/generation/ingest.json ingest --regenerate-summaries
+          uv run python -m examples.multimodal --prefix "$GENERATION_PREFIX" --output .state/generation/answers.json verify --live
+      - name: Remove only this manual run's owned tables
+        if: always() && env.ANTFLY_URL != ''
+        run: uv run python -m examples.multimodal --prefix "$GENERATION_PREFIX" cleanup
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manual-live-generation-evidence
+          path: .state/generation/

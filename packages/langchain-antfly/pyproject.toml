@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+[project]
+name = "langchain-antfly"
+version = "0.1.0rc1"
+readme = "README.md"
+description = "Persistent retrieval, inference, documents and graphs for LangChain with Antfly"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["antfly", "langchain", "rag", "vector-search", "multimodal"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = ["antfly-sdk>=0.2.1,<0.3", "langchain-core>=1.0,<2", "numpy>=1.26"]
+[project.optional-dependencies]
+graph = ["langchain-community>=0.4,<1"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/langchain_antfly"]
+
+[project.urls]
+Homepage = "https://github.com/antflydb/langchain-antfly"
+Repository = "https://github.com/antflydb/langchain-antfly"
+Documentation = "https://github.com/antflydb/langchain-antfly#readme"
+Issues = "https://github.com/antflydb/langchain-antfly/issues"

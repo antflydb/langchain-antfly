@@ -1,0 +1,28 @@
+{
+  "evaluation_revision": "orchard-graph-supplement-v1-frozen-2026-10-26",
+  "corpus": "orchard-report.pdf",
+  "category": "graph",
+  "questions": [
+    {
+      "id": "graph-related-evidence",
+      "operation": "traverse",
+      "question": "Which report evidence objects are directly related to the operations prose?",
+      "start": "page-1",
+      "expected": {"evidence": ["figure-1", "figure-2"]}
+    },
+    {
+      "id": "graph-exact-context-count",
+      "operation": "count",
+      "question": "How many directed REPORT_CONTEXT relationships connect the three report evidence objects?",
+      "expected": {"count": "6", "exact": true}
+    },
+    {
+      "id": "graph-shortest-figure-path",
+      "operation": "shortest_path",
+      "question": "What is the shortest report-context path from the shipment chart to the escalation diagram?",
+      "start": "figure-1",
+      "end": "figure-2",
+      "expected": {"evidence": ["figure-1", "figure-2"], "length": 1}
+    }
+  ]
+}

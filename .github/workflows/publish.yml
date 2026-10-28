@@ -1,0 +1,167 @@
+name: Publish Python packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      registry:
+        description: Registry destination (requires environment approval)
+        type: choice
+        options: [testpypi, pypi]
+        default: testpypi
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ inputs.registry }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      langchain_version: ${{ steps.versions.outputs.langchain }}
+      memory_version: ${{ steps.versions.outputs.memory }}
+    steps:
+      - name: Require the reviewed default branch
+        run: test "$GITHUB_REF" = refs/heads/main
+      - name: Require the configured publishing approval gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REGISTRY: ${{ inputs.registry }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/environments/$REGISTRY" > "$RUNNER_TEMP/publish-environment.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          environment = json.loads((Path(os.environ['RUNNER_TEMP']) / 'publish-environment.json').read_text())
+          rules = [rule for rule in environment.get('protection_rules', []) if rule['type'] == 'required_reviewers']
+          assert len(rules) == 1 and rules[0].get('prevent_self_review') and rules[0].get('reviewers'), 'Configure required reviewers and self-review prevention before publishing'
+          assert environment.get('deployment_branch_policy', {}).get('custom_branch_policies'), 'Configure the main-only environment branch policy before publishing'
+          PY
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          python-version: "3.12"
+      - name: Resolve published dependencies and run contracts
+        run: |
+          uv sync --frozen --all-extras
+          uv run ruff check .
+          uv run python scripts/validate.py --output .state/publish-source -- uv run pytest -q
+      - name: Read release versions
+        id: versions
+        run: |
+          python - <<'PY'
+          import os, tomllib
+          from pathlib import Path
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              for key, package in [('langchain', 'langchain-antfly'), ('memory', 'langgraph-store-antfly')]:
+                  version = tomllib.loads((Path('packages') / package / 'pyproject.toml').read_text())['project']['version']
+                  print(f'{key}={version}', file=output)
+          PY
+      - name: Build and check the release files
+        run: |
+          uv build --no-sources --package langchain-antfly --out-dir dist/langchain-antfly
+          uv build --no-sources --package langgraph-store-antfly --out-dir dist/langgraph-store-antfly
+          uvx 'twine>=7,<8' check --strict dist/*/*.whl dist/*/*.tar.gz
+      - name: Verify clean-wheel contracts using PyPI dependencies
+        run: |
+          uv export --frozen --all-extras --no-emit-workspace --no-hashes --output-file .state/requirements.txt
+          uv venv .state/wheels
+          uv pip install --python .state/wheels/bin/python --index-url https://pypi.org/simple -r .state/requirements.txt dist/*/*.whl
+          uv pip check --python .state/wheels/bin/python
+          .state/wheels/bin/python scripts/validate.py --output .state/publish-wheels -- .state/wheels/bin/python -m pytest -q
+      - name: Record the exact reviewed files
+        run: |
+          git rev-parse HEAD > dist/SOURCE-COMMIT.txt
+          find dist -type f \( -name '*.whl' -o -name '*.tar.gz' \) -print0 | sort -z | xargs -0 sha256sum > dist/SHA256SUMS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: publish-distributions
+          path: dist/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: publish-validation
+          path: |
+            .state/publish-source/
+            .state/publish-wheels/
+
+  publish-langchain:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.registry }}
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: publish-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        with:
+          packages-dir: dist/langchain-antfly/
+          repository-url: ${{ inputs.registry == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+
+  publish-memory:
+    needs: [build, publish-langchain]
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.registry }}
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: publish-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        with:
+          packages-dir: dist/langgraph-store-antfly/
+          repository-url: ${{ inputs.registry == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+
+  verify-publication:
+    needs: [build, publish-langchain, publish-memory]
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: ${{ inputs.registry }}
+      INDEX_URL: ${{ inputs.registry == 'testpypi' && 'https://test.pypi.org/simple' || 'https://pypi.org/simple' }}
+      LANGCHAIN_VERSION: ${{ needs.build.outputs.langchain_version }}
+      MEMORY_VERSION: ${{ needs.build.outputs.memory_version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: publish-distributions
+          path: dist/
+      - name: Check registry bytes and fresh installation
+        run: |
+          for attempt in 1 2 3 4 5; do
+            if python scripts/verify_registry.py dist --registry "$REGISTRY" > registry-verification.json; then
+              break
+            fi
+            if [ "$attempt" = 5 ]; then exit 1; fi
+            sleep 5
+          done
+          uv venv .state/registry
+          uv pip install --python .state/registry/bin/python --index-url https://pypi.org/simple dist/*/*.whl
+          uv pip install --python .state/registry/bin/python --no-deps --force-reinstall --no-cache \
+            --index-url "$INDEX_URL" \
+            "langchain-antfly==$LANGCHAIN_VERSION" "langgraph-store-antfly==$MEMORY_VERSION"
+          uv pip check --python .state/registry/bin/python
+          .state/registry/bin/python -c 'from langchain_antfly import AntflyVectorStore; from langgraph_store_antfly import AntflyStore'
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: registry-verification-${{ inputs.registry }}
+          path: registry-verification.json

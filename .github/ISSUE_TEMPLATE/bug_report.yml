@@ -1,0 +1,24 @@
+name: Bug report
+description: Report a reproducible problem with the Python integration.
+body:
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions and environment
+      description: Include Python, integration package, Antfly SDK and server versions, plus operating system.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Include a small example and relevant error output. Remove tokens, credentials and private data.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and observed behavior
+    validations:
+      required: true

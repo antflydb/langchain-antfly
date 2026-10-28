@@ -1,0 +1,575 @@
+{
+  "recorded_on": "2026-10-26",
+  "dataset": "examples/multimodal/fixtures/orchard-report.pdf",
+  "fixture_sha256": "7afb47d461ee81d8a5e31f39ac72647cbda5b8f7430c5f477eba4fa04371ae15",
+  "evaluation_revision": "orchard-eval-v1-20-frozen-2026-10-26",
+  "live_generation": true,
+  "categories": {
+    "text": {
+      "questions": 4,
+      "retrieval_questions": 4,
+      "recall_passed": 4,
+      "answer_passed": 4,
+      "recall_at_5": 1.0,
+      "answer_accuracy": 1.0
+    },
+    "table": {
+      "questions": 4,
+      "retrieval_questions": 4,
+      "recall_passed": 4,
+      "answer_passed": 4,
+      "recall_at_5": 1.0,
+      "answer_accuracy": 1.0
+    },
+    "visual": {
+      "questions": 4,
+      "retrieval_questions": 4,
+      "recall_passed": 4,
+      "answer_passed": 4,
+      "recall_at_5": 1.0,
+      "answer_accuracy": 1.0
+    },
+    "cross_modal": {
+      "questions": 4,
+      "retrieval_questions": 4,
+      "recall_passed": 4,
+      "answer_passed": 4,
+      "recall_at_5": 1.0,
+      "answer_accuracy": 1.0
+    },
+    "negative": {
+      "questions": 4,
+      "retrieval_questions": 0,
+      "recall_passed": 0,
+      "answer_passed": 4,
+      "recall_at_5": null,
+      "answer_accuracy": 1.0
+    }
+  },
+  "results": [
+    {
+      "evaluation_id": "text-owner",
+      "question": "Who owns operations?",
+      "answer": "Mira Chen is the operations owner [page-1].",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "text-window",
+      "question": "What is the escalation window?",
+      "answer": "The escalation window is 24 hours [page-1].",
+      "evidence_ids": [
+        "figure-2",
+        "page-1",
+        "figure-1"
+      ],
+      "images": [
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "text-target",
+      "question": "What is the Q3 shipment target?",
+      "answer": "Based on the provided document, the Q3 shipment target is 120 crates [page-1].",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "text-products",
+      "question": "Which two fruits does Orchard ship?",
+      "answer": "Based on [page-1], Orchard ships apples and pears.",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "table-pears",
+      "question": "How many pears shipped in Q3?",
+      "answer": "Based on the shipment table, 40 pears were shipped in Q3 [page-1].",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "table-apples",
+      "question": "How many apples shipped in Q2?",
+      "answer": "According to the shipment table, 60 apples were shipped in Q2 [page-1].",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "table-q1",
+      "question": "How many pears shipped in Q1?",
+      "answer": "In Q1, 20 crates of pears were shipped [page-1].",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "table-change",
+      "question": "By how many crates did apple shipments increase from Q1 to Q3?",
+      "answer": "Apple shipments increased by **40 crates** from Q1 to Q3 (from 40 crates in Q1 to 80 crates in Q3) [page-1].",
+      "evidence_ids": [
+        "figure-1",
+        "page-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "visual-total",
+      "question": "How many total crates shipped in Q3 according to the chart?",
+      "answer": "According to the chart, a total of 120 crates were shipped in Q3 [figure-1].",
+      "evidence_ids": [
+        "figure-1",
+        "page-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "visual-only",
+      "question": "What color and shape is the audit marker in the quarterly shipment chart?",
+      "answer": "Based on the quarterly shipment chart, the audit marker is an orange circle [figure-1].",
+      "evidence_ids": [
+        "figure-1",
+        "page-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "visual-threshold",
+      "question": "What temperature threshold is shown in the escalation system diagram?",
+      "answer": "The temperature threshold shown in the escalation system diagram is 85 degrees C [figure-2].",
+      "evidence_ids": [
+        "figure-2",
+        "page-1",
+        "figure-1"
+      ],
+      "images": [
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "visual-route",
+      "question": "Which component follows Controller in the escalation diagram?",
+      "answer": "Based on the escalation diagram in [figure-2], the component that follows Controller is **Pager**.",
+      "evidence_ids": [
+        "figure-2",
+        "figure-1",
+        "page-1"
+      ],
+      "images": [
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "cross-target",
+      "question": "Compare the Q3 total in the shipment chart with the target stated in the report. Was the target met?",
+      "answer": "Yes, the target was met [page-1]. \n\n* According to the quarterly shipment chart, the Q3 total was **120 crates** [figure-1].\n* According to the report, the Q3 shipment target was **120 crates** [page-1]. \n\nBecause the actual shipments reached the target amount, the target was achieved [figure-1], [page-1].",
+      "evidence_ids": [
+        "figure-1",
+        "page-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "cross-window",
+      "question": "Give both the escalation window in the prose and the temperature threshold in the diagram.",
+      "answer": "Based on the provided sources:\n\n* **Escalation window:** 24 hours [page-1]\n* **Temperature threshold:** 85 degrees C [figure-2]",
+      "evidence_ids": [
+        "figure-2",
+        "figure-1",
+        "page-1"
+      ],
+      "images": [
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "cross-owner",
+      "question": "Who owns operations, and which component comes after Controller in the diagram?",
+      "answer": "Based on the provided sources:\n\n* **Operations owner:** Mira Chen [page-1].\n* **Component after Controller:** Pager [figure-2].",
+      "evidence_ids": [
+        "figure-2",
+        "page-1",
+        "figure-1"
+      ],
+      "images": [
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "cross-fruit",
+      "question": "How many pears shipped in Q3 in the table, and how many total crates does the Q3 chart show?",
+      "answer": "Based on the provided evidence:\n\n* **Pears shipped in Q3 (table):** 40 [page-1]\n* **Total crates in Q3 (chart):** 120 [figure-1]",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "negative-phone",
+      "question": "What is the CEO's phone number?",
+      "answer": "Insufficient evidence.",
+      "evidence_ids": [
+        "page-1",
+        "figure-2",
+        "figure-1"
+      ],
+      "images": [
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "negative-revenue",
+      "question": "What was Q3 revenue in dollars?",
+      "answer": "Based on the provided sources, there is insufficient evidence to determine the Q3 revenue in dollars.",
+      "evidence_ids": [
+        "figure-1",
+        "page-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "negative-q4",
+      "question": "What is the confirmed actual shipment total for Q4?",
+      "answer": "Based on the supplied evidence, there is insufficient evidence to determine the shipment total for Q4, as data is only provided for Q1, Q2, and Q3 [page-1, figure-1].",
+      "evidence_ids": [
+        "page-1",
+        "figure-1",
+        "figure-2"
+      ],
+      "images": [
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        }
+      ]
+    },
+    {
+      "evaluation_id": "negative-home",
+      "question": "What is Mira Chen's home address?",
+      "answer": "Insufficient evidence [page-1].",
+      "evidence_ids": [
+        "page-1",
+        "figure-2",
+        "figure-1"
+      ],
+      "images": [
+        {
+          "source_id": "figure-2",
+          "media_key": "7afb47d461ee81d8:figure-2:media",
+          "sha256": "b5692faf4b442de986a037bb4178268b5c560ea2f16a2bd1ca33a02f8b285000",
+          "bytes": 17103,
+          "mime_type": "image/png"
+        },
+        {
+          "source_id": "figure-1",
+          "media_key": "7afb47d461ee81d8:figure-1:media",
+          "sha256": "39b830eb803a8ca563d74063ac670763e0a1eebabcce2c9ff468612ca207b524",
+          "bytes": 18621,
+          "mime_type": "image/png"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Historical vision-provider run on a three-page synthetic fixture; not a general RAG benchmark.",
+    "Current server compatibility checks do not imply a new paid generation run."
+  ]
+}
