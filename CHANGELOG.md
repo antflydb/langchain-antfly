@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.0rc2
 
 - Document metadata filters, sync/async graph-tool calls, parallel-edge traversal,
   and ownership/cleanup across graph, parent and media stores.

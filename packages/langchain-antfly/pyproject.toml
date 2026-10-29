@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 [project]
 name = "langchain-antfly"
-version = "0.1.0rc1"
+version = "0.1.0rc2"
 readme = "README.md"
 description = "Persistent retrieval, inference, documents and graphs for LangChain with Antfly"
 requires-python = ">=3.11"
