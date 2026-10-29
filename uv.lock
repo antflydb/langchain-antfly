@@ -544,7 +544,7 @@ wheels = [
 
 [[package]]
 name = "langchain-antfly"
-version = "0.1.0rc1"
+version = "0.1.0rc2"
 source = { editable = "packages/langchain-antfly" }
 dependencies = [
     { name = "antfly-sdk" },
@@ -725,7 +725,7 @@ wheels = [
 
 [[package]]
 name = "langgraph-store-antfly"
-version = "0.1.0rc1"
+version = "0.1.0rc2"
 source = { editable = "packages/langgraph-store-antfly" }
 dependencies = [
     { name = "langchain-antfly" },

@@ -83,8 +83,8 @@ from JSON/document stores. Stored values use versioned codecs, not Python pickle
 
 ## Graph documents and canonical graph queries
 
-The graph input types below are available in this source checkout and the next
-release. Published `0.1.0rc1` still uses the Community imports described in the
+The graph input types below require `0.1.0rc2` or this source checkout.
+Published `0.1.0rc1` still uses the Community imports described in the
 [migration note](#migrate-from-community-graph-inputs).
 
 Provision a graph table using the integration-owned input types:
@@ -143,7 +143,7 @@ longer inherits Community's `GraphStore`; code relying on that exact base-class
 identity must use the Antfly API directly. No stored-data migration is needed.
 The `[graph]` extra remains accepted for existing installation commands and adds
 no dependencies. Published `0.1.0rc1` is unchanged; use the source checkout until
-the next release is published.
+`0.1.0rc2` is published.
 
 [Community's sunset guidance](https://github.com/langchain-ai/langchain-community/issues/674)
 recommends provider-owned packages. LangChain Core does not currently export
