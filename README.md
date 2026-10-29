@@ -9,9 +9,9 @@ embeddings, reranking, documents, media, graph context, and LangGraph memory.
 | `langchain-antfly` | `langchain_antfly` | Retrieval, embeddings, reranking, document/media stores and graph tools |
 | `langgraph-store-antfly` | `langgraph_store_antfly` | Persistent, namespaced long-term agent memory |
 
-**Release candidate:** `0.1.0rc1`, available on PyPI for
-[LangChain](https://pypi.org/project/langchain-antfly/0.1.0rc1/) and
-[LangGraph memory](https://pypi.org/project/langgraph-store-antfly/0.1.0rc1/).
+**Release candidate:** `0.1.0rc2`, available on PyPI for
+[LangChain](https://pypi.org/project/langchain-antfly/0.1.0rc2/) and
+[LangGraph memory](https://pypi.org/project/langgraph-store-antfly/0.1.0rc2/).
 
 ## Requirements
 
@@ -83,10 +83,9 @@ documents when rerun; `--cleanup` removes only the example's dedicated table.
 Install the release candidates from PyPI:
 
 ```bash
-pip install langchain-antfly==0.1.0rc1
-pip install langgraph-store-antfly==0.1.0rc1
-# Optional GraphDocument ingestion and graph tools:
-pip install 'langchain-antfly[graph]==0.1.0rc1'
+pip install langchain-antfly==0.1.0rc2
+pip install langgraph-store-antfly==0.1.0rc2
+# Graph ingestion and tools are included; no extra is required.
 ```
 
 To build and install the candidate wheels from a checkout:
@@ -96,8 +95,8 @@ uv build --no-sources --package langchain-antfly
 uv build --no-sources --package langgraph-store-antfly
 uv venv .state/wheel-venv
 uv pip install --python .state/wheel-venv/bin/python \
-  dist/langchain_antfly-0.1.0rc1-py3-none-any.whl \
-  dist/langgraph_store_antfly-0.1.0rc1-py3-none-any.whl
+  dist/langchain_antfly-0.1.0rc2-py3-none-any.whl \
+  dist/langgraph_store_antfly-0.1.0rc2-py3-none-any.whl
 ```
 
 ## Ordinary LangChain APIs
@@ -156,7 +155,7 @@ The walkthrough also covers restart, repair, cleanup and native image embeddings
 
 - [Recipes](docs/recipes.md): metadata filters, hybrid retrieval, reranking, caching, graphs and memory.
 - [Graph input migration](docs/recipes.md#migrate-from-community-graph-inputs):
-  APIs replacing Community in `0.1.0rc2` (currently being prepared).
+  APIs replacing Community in `0.1.0rc2`.
 - [API reference](docs/api-reference.md): interfaces and reliability contracts.
 - [Backend migration](docs/backend-swap.md): replace in-memory stores with persistent Antfly stores.
 - [Testing and compatibility](docs/validation.md) and [validation results](docs/validation-report.md).

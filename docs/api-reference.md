@@ -58,7 +58,7 @@ settings.mdelete(["theme"])
 `GraphDocument`, `Node` and `Relationship` are exported from `langchain_antfly`.
 They are Pydantic values for ingestion, with a required source `Document`.
 See [migration from Community](recipes.md#migrate-from-community-graph-inputs)
-for source-checkout availability, compatibility and imports.
+for version requirements, compatibility and imports.
 
 ### Canonical graph JSON
 
