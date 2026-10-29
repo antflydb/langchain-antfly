@@ -60,6 +60,15 @@ Delete this example's dedicated table with `client.drop_table("langchain_example
 inside the client context when finished. Async factories, retrieval and mutations
 are also available.
 
+## Graph input migration in the next release
+
+This source checkout provides `GraphDocument`, `Node`, and `Relationship` directly
+from `langchain_antfly`; graph storage no longer needs Community. Existing
+structurally compatible graph documents remain valid inputs. Published `0.1.0rc1`
+is unchanged and still requires its `[graph]` extra. See the
+[migration guide](https://github.com/antflydb/langchain-antfly/blob/main/docs/recipes.md#migrate-from-community-graph-inputs)
+for imports, source ownership and base-class compatibility.
+
 ## More examples
 
 - [Persistent PDF and image RAG](https://github.com/antflydb/langchain-antfly/tree/main/examples/multimodal):

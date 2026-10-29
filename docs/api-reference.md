@@ -17,7 +17,7 @@ caller-owned. Unsupported or misspelled configuration fails rather than being ig
 | `AntflyJSONStore` | `create(client=..., table=..., namespace="")`; `mget`, `mset`, `mdelete`, `yield_keys(prefix=...)`; async counterparts |
 | `AntflyDocumentStore` | Same store methods; values are LangChain `Document` objects |
 | `AntflyByteStore` | Same store methods; values are bytes; default `max_value_bytes=8388608` per decoded value |
-| `AntflyGraphStore` | Requires `[graph]`; `create(client, table, namespace="", ...)`; `add_graph_documents`, `delete_source`, schema properties/refresh, `query`, `query_graph`, `traverse`, `expand_documents` |
+| `AntflyGraphStore` | `create(client, table, namespace="", ...)`; `add_graph_documents`, `delete_source`, schema properties/refresh, `query`, `query_graph`, `traverse`, `expand_documents` |
 
 Vector factories create missing resources by default and reuse compatible existing
 resources; `create_if_missing=False` gives an attach-only factory. `create()` is
@@ -35,7 +35,9 @@ configuration. Never assume equal dimensions prove semantic/model compatibility.
 index metric's defined conversion; hybrid/RRF and reranker scores are provenance,
 not probabilities. `metadata._antfly` is reserved for ranking/graph annotations.
 Fixed/per-call retrieval filters are intersected. A filter is not write authorization.
-Graph expansion rejects arbitrary vector filters it cannot enforce.
+Graph expansion rejects arbitrary vector filters it cannot enforce. See the
+[metadata filter recipe](recipes.md#filter-by-document-metadata) for Antfly query
+syntax, qualified field names and exact term matching.
 
 Store `mget` preserves input order, duplicate keys, and aligned `None` entries for
 missing keys. Store prefixes and namespaces are encoded reversibly. JSON/document
@@ -50,6 +52,13 @@ assert settings.mget(["theme", "absent", "theme"])[1] is None
 assert list(settings.yield_keys(prefix="the")) == ["theme"]
 settings.mdelete(["theme"])
 ```
+
+### Graph input models
+
+`GraphDocument`, `Node` and `Relationship` are exported from `langchain_antfly`.
+They are Pydantic values for ingestion, with a required source `Document`.
+See [migration from Community](recipes.md#migrate-from-community-graph-inputs)
+for source-checkout availability, compatibility and imports.
 
 ### Canonical graph JSON
 
@@ -93,7 +102,11 @@ relationship contributions are merged under source ownership. Cypher is unsuppor
 
 `create_graph_tools(graph)` supplies bounded `antfly_graph_query` and
 `antfly_graph_traverse` tools with sync/async invocation and the supplied graph's
-fixed scope. Tool arguments cannot switch table or namespace.
+fixed scope. Tool arguments cannot switch table or namespace. The query tool
+requires a JSON string in `query`; `query_graph()` accepts a mapping. See
+[tool invocation](recipes.md#invoke-graph-tools-directly),
+[parallel relationship evidence](recipes.md#parallel-relationships-and-traversal-evidence),
+and [cross-store cleanup](recipes.md#own-graph-parent-and-media-cleanup-explicitly).
 
 ## langgraph-store-antfly
 

@@ -13,8 +13,8 @@
 
 The lockfile records the reproducible development resolution. Package ranges
 are supported by the tested resolutions and focused minimum-version checks,
-not an exhaustive combination of every upstream release. Optional graph
-integration uses `langchain-community`; examples using an agent or chat model
+not an exhaustive combination of every upstream release. Graph ingestion
+uses Antfly-owned input types; examples using an agent or chat model
 require the relevant LangChain/provider packages separately.
 
 ## Hermetic contracts

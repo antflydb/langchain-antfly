@@ -24,6 +24,35 @@ ranking and rerank provenance live in reserved metadata and are not normalized
 probabilities. Standalone rerank sorts the server's input-order scores while
 preserving original document identities and user metadata.
 
+## Filter by document metadata
+
+Vector and hybrid retrieval accept Antfly query objects. Metadata is stored under
+`metadata` by default, so qualify the field with that prefix:
+
+```python
+from langchain_core.documents import Document
+
+store.add_documents([
+    Document(id="europa", page_content="A green locket was found on Europa.",
+             metadata={"station": "Europa"}),
+    Document(id="titan", page_content="A blue locket was found on Titan.",
+             metadata={"station": "Titan"}),
+])
+station_filter = {"term": "Europa", "field": "metadata.station"}
+found = store.similarity_search("lost locket", k=2, filter=station_filter)
+assert {document.id for document in found} == {"europa"}
+found_async = await store.asimilarity_search("lost locket", k=2, filter=station_filter)
+assert {document.id for document in found_async} == {"europa"}
+```
+
+This example assumes an otherwise empty store. Term queries match exact values:
+`"europa"` does not match `"Europa"`. Use your configured `metadata_field` prefix
+if you changed it. Shorthand mappings such as `{"station": "Europa"}` and nested
+forms such as `{"term": {"station": "Europa"}}` are not Antfly query syntax.
+See [Antfly query syntax](https://github.com/antflydb/antfly/blob/main/specs/openapi/antfly/query.yaml) for
+other operators. Constructor filters and per-call filters are intersected; they
+do not grant write authorization or replace server access control.
+
 ## Embedding cache
 
 ```python
@@ -54,11 +83,15 @@ from JSON/document stores. Stored values use versioned codecs, not Python pickle
 
 ## Graph documents and canonical graph queries
 
-Install the graph extra (`langchain-antfly[graph]`) and provision a graph table:
+The graph input types below are available in this source checkout and the next
+release. Published `0.1.0rc1` still uses the Community imports described in the
+[migration note](#migrate-from-community-graph-inputs).
+
+Provision a graph table using the integration-owned input types:
 
 ```python
 from langchain_antfly import AntflyGraphStore
-from langchain_community.graphs.graph_document import GraphDocument, Node, Relationship
+from langchain_antfly import GraphDocument, Node, Relationship
 from langchain_core.documents import Document
 
 graph = AntflyGraphStore.create(client=client, table="report_graph", namespace="orchard")
@@ -87,6 +120,119 @@ query and traversal tools. Supply a graph store with the intended fixed namespac
 and limits before exposing those tools to a model. Tool arguments cannot select a
 new store/table/namespace. Persist the graph source's `metadata.id` explicitly when
 you need stable update/removal identity across source text changes.
+
+### Migrate from Community graph inputs
+
+Graph storage, tools and input models now use the base `langchain-antfly` install.
+Replace `from langchain_community.graphs.graph_document import ...` with:
+
+```python
+from langchain_antfly import GraphDocument, Node, Relationship
+```
+
+Fields retain their familiar names. `GraphDocument.source` is required because
+source identity owns graph contributions. Nodes accept string/integer IDs;
+`properties` defaults to an independent empty dictionary. These Pydantic models
+support `model_dump()` and `model_validate()`.
+
+`add_graph_documents()` also accepts existing objects exposing `nodes`,
+`relationships` and a source `Document`, with compatible node/relationship fields.
+Already-extracted Community or Neo4j graph documents need no conversion. Extraction
+providers remain responsible for their own dependencies. `AntflyGraphStore` no
+longer inherits Community's `GraphStore`; code relying on that exact base-class
+identity must use the Antfly API directly. No stored-data migration is needed.
+The `[graph]` extra remains accepted for existing installation commands and adds
+no dependencies. Published `0.1.0rc1` is unchanged; use the source checkout until
+the next release is published.
+
+[Community's sunset guidance](https://github.com/langchain-ai/langchain-community/issues/674)
+recommends provider-owned packages. LangChain Core does not currently export
+these graph contracts; the maintained
+[Neo4j graph types](https://github.com/langchain-ai/langchain-neo4j/tree/main/libs/neo4j/langchain_neo4j/graphs)
+belong to a database-specific integration. Antfly owns its input models and graph
+operations rather than requiring another database integration for base types.
+
+### Invoke graph tools directly
+
+Direct `query_graph()` calls take a Python mapping. The query **tool** takes a
+`query` argument containing a JSON string; encode the mapping with `json.dumps`:
+
+```python
+import json
+from langchain_antfly import create_graph_tools
+
+tools = {tool.name: tool for tool in create_graph_tools(graph)}
+key = graph.node_key("Person", "mira")
+query = {"neighbors": {"index": "graph", "traverse": {
+    "start": {"keys": [key]}, "max_depth": 1, "limit": 10,
+    "include_documents": True,
+}}}
+rows = graph.query_graph(query)
+rows_via_tool = tools["antfly_graph_query"].invoke({"query": json.dumps(query)})
+rows_async = await tools["antfly_graph_query"].ainvoke({"query": json.dumps(query)})
+traversed = tools["antfly_graph_traverse"].invoke(
+    {"keys": [key], "max_depth": 1, "limit": 10}
+)
+traversed_async = await tools["antfly_graph_traverse"].ainvoke(
+    {"keys": [key], "max_depth": 1, "limit": 10}
+)
+```
+
+These async snippets run inside an async function or notebook. The store and its
+client must remain open until awaited calls finish. Tool arguments cannot switch
+the table or namespace supplied when constructing the graph.
+
+### Parallel relationships and traversal evidence
+
+Traversal discovers reachable nodes; it is not an enumeration of every edge or
+every possible path. On the tested Antfly `0.3.0-rc.5` server, two relationship
+types joining the same nodes produce one traversal result for that destination,
+with one selected path. Do not infer that another relationship was deleted or
+that the selected path represents all evidence.
+
+To inspect one type, use `graph.traverse([key], edge_types=["OWNS"], max_depth=1)`.
+To enumerate relationship matches, use canonical MATCH instead. For a graph with
+`ASSERTS` and `REFUTES` relationships between the same nodes:
+
+```python
+matches = graph.query_graph({"claims": {
+    "match": {"anchor": "left", "nodes": {"left": {}, "right": {}},
+              "edges": [{"from": "left", "to": "right",
+                         "types": ["ASSERTS", "REFUTES"]}]},
+    "return": {"bindings": ["left", "right"], "limit": 20},
+}})
+```
+
+MATCH can return repeated endpoint bindings for distinct relationships; preserve
+row/provenance evidence rather than deduplicating rows by destination. Limits
+still apply. Do not rely on which parallel edge traversal selects or on row order.
+
+### Own graph, parent and media cleanup explicitly
+
+`delete_source(source_id)` removes that source's graph contributions and preserves
+other sources' contributions. It does not delete separate document/media-store
+records. Keep an application-owned manifest of parent IDs and media keys for each
+source. When each source owns distinct parent/media keys, remove them together:
+
+```python
+source_id = "orchard-q3"
+owned_parent_ids = ["orchard-q3/report", "orchard-q3/chart"]
+owned_media_keys = ["orchard-q3/chart.png"]
+
+# graph, parents and media are scoped stores constructed by this application.
+graph.delete_source(source_id)
+parents.mdelete(owned_parent_ids)
+media.mdelete(owned_media_keys)
+assert parents.mget(owned_parent_ids) == [None, None]
+assert media.mget(owned_media_keys) == [None]
+```
+
+The sequence is not a cross-store transaction. Serialize it with ingestion for
+that source, retain the manifest until all steps succeed, and hide removed sources
+from readers while cleanup is pending. Shared media/parents need reference
+tracking: delete a shared key only after its last owner is removed. A failure
+between steps can leave stale or missing references; readers must detect missing
+parents/media before generation. Inspect uncertain write outcomes before retrying.
 
 ## Agent tools in a running graph
 
