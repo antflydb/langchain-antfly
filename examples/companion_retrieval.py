@@ -16,8 +16,7 @@ import sys
 import time
 from pathlib import Path
 
-from langchain_antfly import AntflyGraphStore, AntflyReranker, AntflyRetriever
-from langchain_community.graphs.graph_document import GraphDocument, Node, Relationship
+from langchain_antfly import AntflyGraphStore, AntflyReranker, AntflyRetriever, GraphDocument, Node, Relationship
 from langchain_core.documents import Document
 
 from ._client import client_from_env
@@ -192,7 +191,7 @@ def run(client, *, prefix: str, model: str, rerank_model: str, graph_table: str)
         "graph_multimodal_boundary": boundary,
         "dependencies": {
             name: importlib.metadata.version(name)
-            for name in ("langchain-antfly", "antfly-sdk", "langchain-core", "langchain-community")
+            for name in ("langchain-antfly", "antfly-sdk", "langchain-core")
         },
         "duration_seconds": time.monotonic() - started,
         "generation_calls": 0,

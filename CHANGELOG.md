@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Document metadata filters, sync/async graph-tool calls, parallel-edge traversal,
+  and ownership/cleanup across graph, parent and media stores.
+- Replace the Community graph dependency with Antfly-owned `GraphDocument`,
+  `Node` and `Relationship` input types. Graph storage and tools use the base
+  install; the `[graph]` extra remains accepted for existing install commands.
+- Continue accepting structurally compatible graph documents; the graph store
+  no longer inherits Community's `GraphStore`. Cypher remains unsupported.
+
 ## 0.1.0rc1
 
 Initial release candidate for the Python Antfly integration packages.

@@ -9,8 +9,8 @@ from types import SimpleNamespace
 
 import pytest
 from antfly import AntflyClient, AntflyNotFoundError
+from langchain_antfly import GraphDocument, Node, Relationship
 from langchain_antfly.graphs import AntflyGraphStore
-from langchain_community.graphs.graph_document import GraphDocument, Node, Relationship
 from langchain_core.documents import Document
 
 
@@ -685,3 +685,23 @@ def test_live_explicit_self_table_selectors_equal_omitted_table_selectors():
     finally:
         client.drop_table(table)
         client.close()
+
+
+def test_graph_ingestion_accepts_foreign_structural_documents():
+    # Extraction providers may return their own models. No base-class identity
+    # or conversion to Antfly's input models should be required for ingestion.
+    a = SimpleNamespace(id="a", type="Person", properties={"name": "Mira"})
+    b = SimpleNamespace(id="b", type="Report", properties={})
+    foreign = SimpleNamespace(
+        nodes=[a, b],
+        relationships=[SimpleNamespace(source=a, target=b, type="OWNS", properties={})],
+        source=Document(page_content="Mira owns a report.", metadata={"id": "foreign-source"}),
+    )
+    client = Client()
+    graph = AntflyGraphStore(client, "t")
+    graph.add_graph_documents([foreign])
+    assert client.rows[graph.node_key("Person", "a")]["properties"] == {"name": "Mira"}
+    graph.refresh_schema()
+    assert graph.get_structured_schema["relationship_types"] == ["OWNS"]
+    graph.delete_source("foreign-source")
+    assert graph.node_key("Person", "a") not in client.rows

@@ -17,9 +17,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-dependencies = ["antfly-sdk>=0.2.1,<0.3", "langchain-core>=1.0,<2", "numpy>=1.26"]
+dependencies = ["antfly-sdk>=0.2.1,<0.3", "langchain-core>=1.0,<2", "numpy>=1.26", "pydantic>=2.7.4,<3"]
 [project.optional-dependencies]
-graph = ["langchain-community>=0.4,<1"]
+# Retained so existing installs using [graph] continue to work.
+graph = []
 [tool.hatch.build.targets.wheel]
 packages = ["src/langchain_antfly"]
 

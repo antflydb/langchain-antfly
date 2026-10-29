@@ -154,7 +154,9 @@ The walkthrough also covers restart, repair, cleanup and native image embeddings
 
 ## Documentation
 
-- [Recipes](docs/recipes.md): hybrid retrieval, reranking, caching, graphs and memory.
+- [Recipes](docs/recipes.md): metadata filters, hybrid retrieval, reranking, caching, graphs and memory.
+- [Graph input migration](docs/recipes.md#migrate-from-community-graph-inputs):
+  source-checkout APIs replacing Community in the next release.
 - [API reference](docs/api-reference.md): interfaces and reliability contracts.
 - [Backend migration](docs/backend-swap.md): replace in-memory stores with persistent Antfly stores.
 - [Testing and compatibility](docs/validation.md) and [validation results](docs/validation-report.md).

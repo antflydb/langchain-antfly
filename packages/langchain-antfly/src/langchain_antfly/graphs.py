@@ -16,11 +16,6 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 from urllib.parse import quote
 
-try:
-    from langchain_community.graphs.graph_store import GraphStore
-except ImportError as error:
-    raise ImportError("Graph integration requires pip install 'langchain-antfly[graph]'") from error
-
 from ._utils import WriteOutcomeError, check_write_result, hits, request, response_dict, run_async
 
 
@@ -48,8 +43,8 @@ def _bind(value: Any, params: dict[str, Any], used: set[str]) -> Any:
     return value
 
 
-class AntflyGraphStore(GraphStore):
-    """Full GraphStore with source-owned ingestion and bounded scoped reads.
+class AntflyGraphStore:
+    """Graph storage with source-owned ingestion and bounded scoped reads.
 
     MATCH requires a server supporting explicit table-qualified aliases.
     Traversals require complete path identity evidence; unsupported servers fail
@@ -235,6 +230,12 @@ class AntflyGraphStore(GraphStore):
         raise RuntimeError("Graph ingestion conflicted repeatedly; no uncommitted attempt was applied")
 
     def add_graph_documents(self, graph_documents: list[Any], include_source: bool = False) -> None:
+        """Ingest native or structurally compatible graph documents.
+
+        Inputs expose nodes, relationships and a required source Document. Existing
+        Community/Neo4j graph documents can be passed without conversion; this
+        package does not require either integration or inherit their GraphStore.
+        """
         for graph in graph_documents:
             source = self.source_id(graph.source)
             contributions: dict[str, dict[str, Any]] = {}
