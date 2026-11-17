@@ -4,14 +4,14 @@ Persistent vector and hybrid retrieval, text/image embeddings, reranking,
 document and media storage, and graph context backed by an Antfly server.
 Python 3.11 or newer. Apache-2.0 licensed.
 
-**Release candidate:** `0.1.0rc2`. Requires `antfly-sdk>=0.2.1` and a compatible
+**Stable release:** `0.1.0`. Requires `antfly-sdk>=0.2.1,<0.3` and a compatible
 Antfly server; `0.3.0-rc.5` is the tested baseline. See the
 [server setup](https://github.com/antflydb/langchain-antfly#first-result).
 
 ## Install
 
 ```bash
-pip install langchain-antfly==0.1.0rc2
+pip install langchain-antfly==0.1.0
 # Graph ingestion and tools are included; no extra is required.
 ```
 
