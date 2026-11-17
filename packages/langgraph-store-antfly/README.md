@@ -4,14 +4,14 @@ Persistent, namespaced long-term memory for LangGraph agents using Antfly.
 Supports sync/async operations, namespace enumeration, filtering and optional
 semantic search. Python 3.11 or newer. Apache-2.0 licensed.
 
-**Release candidate:** `0.1.0rc2`. Uses the matching `langchain-antfly` candidate
-and published `antfly-sdk>=0.2.1`. Antfly `0.3.0-rc.5` is the tested server
+**Stable release:** `0.1.0`. Uses the matching stable `langchain-antfly` package
+and published `antfly-sdk>=0.2.1,<0.3`. Antfly `0.3.0-rc.5` is the tested server
 baseline. See the [server setup](https://github.com/antflydb/langchain-antfly#first-result).
 
 ## Install
 
 ```bash
-pip install langgraph-store-antfly==0.1.0rc2
+pip install langgraph-store-antfly==0.1.0
 ```
 
 This installs the Python adapters and their dependencies. It does not install or

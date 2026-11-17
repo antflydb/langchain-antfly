@@ -9,9 +9,12 @@ embeddings, reranking, documents, media, graph context, and LangGraph memory.
 | `langchain-antfly` | `langchain_antfly` | Retrieval, embeddings, reranking, document/media stores and graph tools |
 | `langgraph-store-antfly` | `langgraph_store_antfly` | Persistent, namespaced long-term agent memory |
 
-**Release candidate:** `0.1.0rc2`, available on PyPI for
-[LangChain](https://pypi.org/project/langchain-antfly/0.1.0rc2/) and
-[LangGraph memory](https://pypi.org/project/langgraph-store-antfly/0.1.0rc2/).
+**Stable release:** `0.1.0`, available on PyPI for
+[LangChain](https://pypi.org/project/langchain-antfly/0.1.0/) and
+[LangGraph memory](https://pypi.org/project/langgraph-store-antfly/0.1.0/).
+Release notes and distribution checksums are available for
+[LangChain](https://github.com/antflydb/langchain-antfly/releases/tag/langchain-antfly/v0.1.0)
+and [LangGraph memory](https://github.com/antflydb/langchain-antfly/releases/tag/langgraph-store-antfly/v0.1.0).
 
 ## Requirements
 
@@ -80,23 +83,23 @@ documents when rerun; `--cleanup` removes only the example's dedicated table.
 
 ### Install the distributions
 
-Install the release candidates from PyPI:
+Install the stable packages from PyPI:
 
 ```bash
-pip install langchain-antfly==0.1.0rc2
-pip install langgraph-store-antfly==0.1.0rc2
+pip install langchain-antfly==0.1.0
+pip install langgraph-store-antfly==0.1.0
 # Graph ingestion and tools are included; no extra is required.
 ```
 
-To build and install the candidate wheels from a checkout:
+To build and install the wheels from a checkout:
 
 ```bash
 uv build --no-sources --package langchain-antfly
 uv build --no-sources --package langgraph-store-antfly
 uv venv .state/wheel-venv
 uv pip install --python .state/wheel-venv/bin/python \
-  dist/langchain_antfly-0.1.0rc2-py3-none-any.whl \
-  dist/langgraph_store_antfly-0.1.0rc2-py3-none-any.whl
+  dist/langchain_antfly-0.1.0-py3-none-any.whl \
+  dist/langgraph_store_antfly-0.1.0-py3-none-any.whl
 ```
 
 ## Ordinary LangChain APIs

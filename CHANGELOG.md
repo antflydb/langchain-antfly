@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.0 — 2026-11-16
+
+First stable release of `langchain-antfly` and `langgraph-store-antfly`.
+
+- Promote the validated RC2 APIs without runtime changes.
+- Mark both distributions Production/Stable, update installation documentation,
+  and pin the memory package to `langchain-antfly==0.1.0`.
+- Retain Python 3.11+, `antfly-sdk>=0.2.1,<0.3`, and the documented Antfly
+  `0.3.0-rc.5` server baseline.
+- Include vector/hybrid retrieval, embeddings, reranking, graph operations,
+  persistent document/media stores, and namespaced LangGraph long-term memory.
+
+Graph queries use Antfly JSON rather than Cypher. Memory is long-term storage,
+not execution checkpointing. The server and embedding models are configured
+separately; see the setup guide and validation limits.
+
 ## 0.1.0rc2
 
 - Document metadata filters, sync/async graph-tool calls, parallel-edge traversal,

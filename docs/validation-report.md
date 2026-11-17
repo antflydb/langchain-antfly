@@ -4,6 +4,17 @@ The integration is checked with deterministic contracts, upstream LangChain
 suites, real Antfly models/storage, clean wheel installations and executable
 examples. This page describes the tested scope and limits.
 
+## Stable 0.1.0 validation
+
+On 2026-11-16, the stable-version source passed **380 checks with zero skips**
+against a local Antfly server, including real BGE embeddings, reranking, graph
+operations, namespaced memory and the unchanged OpenAI embeddings client pointed
+at the local server. The source hashes were unchanged during execution. Both
+stable wheels and source distributions passed strict Twine metadata checks.
+The stable release promotes RC2 without runtime changes; the previously recorded
+released-server RC5 baseline and its limits still apply. This validation did not
+repeat paid vision generation, a server restart, or Windows testing.
+
 ## Python integration
 
 The release-candidate implementation passed **377 checks with zero skips** in
